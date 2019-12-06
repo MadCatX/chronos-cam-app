@@ -20,6 +20,7 @@
 #include "errorCodes.h"
 #include "types.h"
 #include "gpmcRegs.h"
+#include <cstdint>
 
 #define GPMC_MAPPED_BASE	map_base
 #define	GPMC_RANGE_BASE		0x1000000
@@ -46,7 +47,7 @@ public:
 	void writeAcqMem(UInt32 * buf, UInt32 offsetWords, UInt32 length);
 
 private:
-	UInt32 map_base, map_registers, map_ram;
+	uintptr_t map_base, map_registers, map_ram;
 };
 
 #endif // GPMC_H

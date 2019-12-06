@@ -42,19 +42,19 @@ Int32 GPMC::init()
 	if(fd_ram < 0)
 		return GPMCERR_FOPEN;
 
-	map_base =(unsigned int) mmap(nullptr, 0x1000000/*16MB*/, PROT_READ | PROT_WRITE, MAP_SHARED, fd_reg, GPMC_BASE);
+	map_base =(uintptr_t) mmap(nullptr, 0x1000000/*16MB*/, PROT_READ | PROT_WRITE, MAP_SHARED, fd_reg, GPMC_BASE);
 
-	map_registers =(unsigned int) mmap(nullptr, 0x1000000/*16MB*/, PROT_READ | PROT_WRITE, MAP_SHARED, fd_gpmc, GPMC_RANGE_BASE + GPMC_REGISTER_OFFSET);
+	map_registers =(uintptr_t) mmap(nullptr, 0x1000000/*16MB*/, PROT_READ | PROT_WRITE, MAP_SHARED, fd_gpmc, GPMC_RANGE_BASE + GPMC_REGISTER_OFFSET);
 
-	map_ram =(unsigned int) mmap(nullptr, 0x1000000/*16MB*/, PROT_READ | PROT_WRITE, MAP_SHARED, fd_ram, GPMC_RANGE_BASE + GPMC_RAM_OFFSET);
+	map_ram =(uintptr_t) mmap(nullptr, 0x1000000/*16MB*/, PROT_READ | PROT_WRITE, MAP_SHARED, fd_ram, GPMC_RANGE_BASE + GPMC_RAM_OFFSET);
 
-	if(map_base == -1)
+	if(map_base == (uintptr_t)MAP_FAILED)
 		return GPMCERR_MAP;
 
-	if(map_registers == -1)
+	if(map_registers == (uintptr_t)MAP_FAILED)
 		return GPMCERR_MAP;
 
-	if(map_ram == -1)
+	if(map_ram == (uintptr_t)MAP_FAILED)
 		return GPMCERR_MAP;
 
 	//Reset GPMC
