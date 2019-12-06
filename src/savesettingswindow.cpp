@@ -36,12 +36,6 @@
 
 #define USE_AUTONAME_FOR_SAVE ""
 
-//Defining this here because something in the preprocessor undefines this somewhere up above
-#define min(a,b) \
-   ({ __typeof__ (a) _a = (a); \
-	   __typeof__ (b) _b = (b); \
-	 _a < _b ? _a : _b; })
-
 saveSettingsWindow::saveSettingsWindow(QWidget *parent, Camera * camInst) :
 	QWidget(parent),
 	ui(new Ui::saveSettingsWindow)
@@ -342,8 +336,9 @@ void saveSettingsWindow::updateBitrate()
 	char str[100];
 	
 	if (saveFormat == SAVE_MODE_H264) {
-		UInt32 bitrate = min(ui->spinBitrate->value() * camera->recordingData.is.geometry.hRes * camera->recordingData.is.geometry.vRes * frameRate, min(60000000, (UInt32)(ui->spinMaxBitrate->value() * 1000000.0)) * frameRate / 60);	//Max of 60Mbps
-		
+		UInt32 bitrate = std::min((UInt32)ui->spinBitrate->value() * camera->recordingData.is.geometry.hRes * camera->recordingData.is.geometry.vRes * frameRate,
+					  std::min(60000000U, (UInt32)(ui->spinMaxBitrate->value() * 1000000.0)) * frameRate / 60);	//Max of 60Mbps
+
 		sprintf(str, "%4.2fMbps @\n%dx%d %dfps", (double)bitrate / 1000000.0, camera->recordingData.is.geometry.hRes, camera->recordingData.is.geometry.vRes, frameRate);
 		ui->lblBitrate->setText(str);
 	}
