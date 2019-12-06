@@ -68,5 +68,5 @@ void CamLineEdit::setHasUnits(bool value){
 
 double CamLineEdit::siText()
 {
-	return siText2Double(text().toAscii().data());
+	return siText2Double(text().toLatin1().data());
 }
