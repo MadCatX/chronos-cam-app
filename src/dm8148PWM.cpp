@@ -18,8 +18,7 @@
 #include <sys/mman.h>
 #include "dm8148PWM.h"
 #include "defines.h"
-#include "types.h"
-
+#include "util.h"
 
 dm8148PWM::dm8148PWM()
 {
@@ -79,7 +78,7 @@ void dm8148PWM::setDuty(double pw)
 	if(0 == period)
 		return;
 
-	UInt32 duty = within(pw, 0.0, 1.0) * period;
+	UInt32 duty = std::clamp(pw, 0.0, 1.0) * period;
 
 
 	if(duty < 2)

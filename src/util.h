@@ -20,6 +20,30 @@
 #include "types.h"
 #include <algorithm>
 
+#if __cplusplus < 201703L
+
+/*
+ * The std::clamp function is part of the STL library
+ * since C++17 standard. Fake its support in earlier standards
+ * to simplify the code that uses it
+ */
+namespace std {
+
+template <typename T>
+inline
+const T & clamp(const T& val, const T& min, const T& max)
+{
+	if (val < min)
+		return min;
+	else if (val > max)
+		return max;
+	return val;
+}
+
+} // namespace std
+
+#endif // No C++17
+
 void delayms(int ms);
 
 /* delayms_events:
