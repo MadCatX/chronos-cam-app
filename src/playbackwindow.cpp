@@ -94,7 +94,7 @@ playbackWindow::playbackWindow(QWidget *parent, Camera * cameraInst, bool autosa
 
 		on_cmdSave_clicked();
 	} else {
-		strcpy(camera->vinst->filename, appSettings.value("recorder/filename", "").toString().toAscii());
+		strcpy(camera->vinst->filename, appSettings.value("recorder/filename", "").toString().toLatin1());
 	}
 	
 }

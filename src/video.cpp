@@ -117,7 +117,7 @@ void Video::setPosition(unsigned int position)
 
 	if (reply.isError()) {
 		QDBusError err = reply.error();
-		fprintf(stderr, "Failed to set playback position: %s - %s\n", err.name().data(), err.message().toAscii().data());
+		fprintf(stderr, "Failed to set playback position: %s - %s\n", err.name().data(), err.message().toLatin1().data());
 	}
 }
 
@@ -134,7 +134,7 @@ void Video::setPlayback(int rate)
 
 	if (reply.isError()) {
 		QDBusError err = reply.error();
-		fprintf(stderr, "Failed to set playback rate: %s - %s\n", err.name().data(), err.message().toAscii().data());
+		fprintf(stderr, "Failed to set playback rate: %s - %s\n", err.name().data(), err.message().toLatin1().data());
 	}
 }
 
@@ -162,7 +162,7 @@ void Video::loopPlayback(unsigned int start, unsigned int length, int rate)
 
 	if (reply.isError()) {
 		QDBusError err = reply.error();
-		fprintf(stderr, "Failed to start playback loop: %s - %s\n", err.name().data(), err.message().toAscii().data());
+		fprintf(stderr, "Failed to start playback loop: %s - %s\n", err.name().data(), err.message().toLatin1().data());
 	}
 }
 
@@ -179,7 +179,7 @@ void Video::setDisplayOptions(bool zebra, FocusPeakColors fpColor)
 
 	if (reply.isError()) {
 		QDBusError err = reply.error();
-		fprintf(stderr, "Failed to configure display options: %s - %s\n", err.name().data(), err.message().toAscii().data());
+		fprintf(stderr, "Failed to configure display options: %s - %s\n", err.name().data(), err.message().toLatin1().data());
 	}
 }
 
@@ -220,7 +220,7 @@ void Video::setOverlay(const char *format)
 
 	if (reply.isError()) {
 		QDBusError err = reply.error();
-		fprintf(stderr, "Failed to configure video overlay: %s - %s\n", err.name().data(), err.message().toAscii().data());
+		fprintf(stderr, "Failed to configure video overlay: %s - %s\n", err.name().data(), err.message().toLatin1().data());
 	}
 	QSettings appSettings;
 	appSettings.setValue("overlayEnabled", true);
@@ -415,7 +415,7 @@ void Video::setDisplayPosition(bool videoOnRight)
 
 	if (reply.isError()) {
 		QDBusError err = reply.error();
-		fprintf(stderr, "Failed to configure horizontal offset: %s - %s\n", err.name().data(), err.message().toAscii().data());
+		fprintf(stderr, "Failed to configure horizontal offset: %s - %s\n", err.name().data(), err.message().toLatin1().data());
 	}
 }
 

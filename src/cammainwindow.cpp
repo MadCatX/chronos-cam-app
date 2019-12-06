@@ -472,7 +472,7 @@ void CamMainWindow::updateCurrentSettingsLabel()
 	char fpsString[30];
 	char expString[30];
 
-	sprintf(fpsString, QString::number(1 / framePeriod).toAscii());
+	sprintf(fpsString, QString::number(1 / framePeriod).toLatin1());
 	getSIText(expString, expPeriod, 4, DEF_SI_OPTS, 10);
 	shutterAngle = std::max(shutterAngle, 1); //to prevent 0 degrees from showing on the label if the current exposure is less than 1/360'th of the frame period.
 

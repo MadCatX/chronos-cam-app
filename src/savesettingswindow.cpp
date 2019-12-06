@@ -300,7 +300,7 @@ void saveSettingsWindow::refreshDriveList()
 				ui->comboDrive->addItem(drive);
 
 				// If this drive matches the previous selection, select it.
-				if (strcmp(mnt.mnt_dir, prevDirectory.toAscii().data()) == 0) {
+				if (strcmp(mnt.mnt_dir, prevDirectory.toLatin1().data()) == 0) {
 					ui->comboDrive->setCurrentIndex(ui->comboDrive->count() - 1);
 					setDefault = false;
 				}
