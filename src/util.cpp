@@ -19,8 +19,12 @@
 #include <sys/stat.h>
 #include <QCoreApplication>
 #include <QTime>
+#include <linux/limits.h>
 
 #include "util.h"
+#ifndef FALSE
+	#define FALSE   0
+#endif // FALSE
 
 void delayms(int ms)
 {
