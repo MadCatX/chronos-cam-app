@@ -35,9 +35,9 @@ Int32 dm8148PWM::init(UInt32 address)
 		return DM8148PWM_ERR_FOPEN;
 
 
-	map_base = (unsigned int) mmap(0, 4096/*4k*/, PROT_READ | PROT_WRITE, MAP_SHARED, fd_reg, address);
+	map_base = (uintptr_t) mmap(nullptr, 4096/*4k*/, PROT_READ | PROT_WRITE, MAP_SHARED, fd_reg, address);
 
-	if(map_base == -1)
+	if(map_base == (uintptr_t)MAP_FAILED)
 		return DM8148PWM_ERR_MAP;
 
 	writeRegister(TCLR, 0x18C2);

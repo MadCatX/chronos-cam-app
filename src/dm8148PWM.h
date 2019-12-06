@@ -18,6 +18,7 @@
 #define DM8148PWM_H
 
 #include "types.h"
+#include <cstdint>
 
 #define TIDR			0x00
 #define TIOCP_CFG		0x10
@@ -51,7 +52,7 @@ public:
 private:
 	void writeRegister(UInt32 offset, UInt32 data);
 
-	UInt32 map_base;
+	uintptr_t map_base;
 	UInt32 period;
 };
 
