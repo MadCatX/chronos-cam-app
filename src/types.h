@@ -25,9 +25,21 @@
 
 #define	Int8	char
 #define	Int16	short
-#define	Int32	int
-#define	Int64	long long
+#ifdef Int32
+	#undef Int32
+	#define	Int32	int
+#else
+	#define	Int32	int
+#endif // Int32
+#ifdef Int64
+	#undef Int64
+	#define Int64 long long
+#else
+	#define Int64 long long
+#endif // Int64
 
+#ifdef __cplusplus
 #include <algorithm>
+#endif // __cplusplus
 
 #endif // TYPES_H

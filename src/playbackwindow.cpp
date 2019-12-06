@@ -19,7 +19,6 @@
 #include <sys/statvfs.h>
 #include <sys/vfs.h>
 
-#include "util.h"
 #include "camera.h"
 
 #include "savesettingswindow.h"
@@ -30,6 +29,8 @@
 #include <QMessageBox>
 #include <QSettings>
 #include <QKeyEvent>
+
+#include "util.h"
 
 #define USE_AUTONAME_FOR_SAVE ""
 #define MIN_FREE_SPACE 20000000
