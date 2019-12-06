@@ -38,8 +38,4 @@
 	#define Int64 long long
 #endif // Int64
 
-#ifdef __cplusplus
-#include <algorithm>
-#endif // __cplusplus
-
 #endif // TYPES_H

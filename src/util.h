@@ -18,6 +18,7 @@
 #define UTIL_H
 
 #include "types.h"
+#include <algorithm>
 
 void delayms(int ms);
 
@@ -35,6 +36,5 @@ int path_is_mounted(const char *path);
 
 UInt16 readPixelBuf12(const void * buf, UInt32 pixel);
 void writePixelBuf12(void * buf, UInt32 pixel, UInt16 value);
-
 
 #endif // UTIL_H
