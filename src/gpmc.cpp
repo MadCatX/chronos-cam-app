@@ -42,11 +42,11 @@ Int32 GPMC::init()
 	if(fd_ram < 0)
 		return GPMCERR_FOPEN;
 
-	map_base =(unsigned int) mmap(0, 0x1000000/*16MB*/, PROT_READ | PROT_WRITE, MAP_SHARED, fd_reg, GPMC_BASE);
+	map_base =(unsigned int) mmap(nullptr, 0x1000000/*16MB*/, PROT_READ | PROT_WRITE, MAP_SHARED, fd_reg, GPMC_BASE);
 
-	map_registers =(unsigned int) mmap(0, 0x1000000/*16MB*/, PROT_READ | PROT_WRITE, MAP_SHARED, fd_gpmc, GPMC_RANGE_BASE + GPMC_REGISTER_OFFSET);
+	map_registers =(unsigned int) mmap(nullptr, 0x1000000/*16MB*/, PROT_READ | PROT_WRITE, MAP_SHARED, fd_gpmc, GPMC_RANGE_BASE + GPMC_REGISTER_OFFSET);
 
-	map_ram =(unsigned int) mmap(0, 0x1000000/*16MB*/, PROT_READ | PROT_WRITE, MAP_SHARED, fd_ram, GPMC_RANGE_BASE + GPMC_RAM_OFFSET);
+	map_ram =(unsigned int) mmap(nullptr, 0x1000000/*16MB*/, PROT_READ | PROT_WRITE, MAP_SHARED, fd_ram, GPMC_RANGE_BASE + GPMC_RAM_OFFSET);
 
 	if(map_base == -1)
 		return GPMCERR_MAP;
@@ -65,7 +65,7 @@ Int32 GPMC::init()
 	GPMC_CONFIG = GPMC_CONFIG | (3 << 8);
 
 	GPMC_TIMEOUT_CONTROL =	0x1FF << 4 |	/*TIMEOUTSTARTVALUE*/
-        0;				/*TIMEOUTENABLE*/      // <<<<<<<<<<<<<<<<<<<<<<<<<<< TIMEOUT ENABLE
+	0;				/*TIMEOUTENABLE*/      // <<<<<<<<<<<<<<<<<<<<<<<<<<< TIMEOUT ENABLE
 
 	//Disable CS0
 	GPMC_CONFIG7_i(0) = 0;
