@@ -332,7 +332,8 @@ CameraErrortype Video::startRecording(UInt32 sizeX, UInt32 sizeY, UInt32 start, 
 	map.insert("length", QVariant(length));
 	switch(save_mode) {
 	case SAVE_MODE_H264:
-		realBitrate = min(bitsPerPixel * sizeX * sizeY * framerate, min(60000000, (UInt32)(maxBitrate * 1000000.0)));
+		realBitrate = std::min((UInt32)(bitsPerPixel * sizeX * sizeY * framerate + 0.5),
+				       std::min((UInt32)60000000, (UInt32)(maxBitrate * 1000000.0)));
 		estFileSize = realBitrate * (length / framerate) / 8; /* size = (bits/sec) * (seconds) / (8 bits/byte) */
 		map.insert("format", QVariant("h264"));
 		map.insert("bitrate", QVariant((uint)realBitrate));

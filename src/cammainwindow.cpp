@@ -474,7 +474,7 @@ void CamMainWindow::updateCurrentSettingsLabel()
 
 	sprintf(fpsString, QString::number(1 / framePeriod).toAscii());
 	getSIText(expString, expPeriod, 4, DEF_SI_OPTS, 10);
-	shutterAngle = max(shutterAngle, 1); //to prevent 0 degrees from showing on the label if the current exposure is less than 1/360'th of the frame period.
+	shutterAngle = std::max(shutterAngle, 1); //to prevent 0 degrees from showing on the label if the current exposure is less than 1/360'th of the frame period.
 
 	if(camera->pinst->flags & POWER_FLAG_BATT_PRESENT)	//If battery present
 	{

@@ -255,7 +255,7 @@ void RecSettingsWindow::on_spinHRes_valueChanged(int arg1)
 
 void RecSettingsWindow::on_spinHRes_editingFinished()
 {
-	ui->spinHRes->setValue(max(camera->sensor->getMinHRes(), round((UInt32)ui->spinHRes->value(), camera->sensor->getHResIncrement())));
+	ui->spinHRes->setValue(std::max(camera->sensor->getMinHRes(), round((UInt32)ui->spinHRes->value(), camera->sensor->getHResIncrement())));
 
 
 	updateFramePreview();
@@ -279,7 +279,7 @@ void RecSettingsWindow::on_spinVRes_valueChanged(int arg1)
 
 void RecSettingsWindow::on_spinVRes_editingFinished()
 {
-	ui->spinVRes->setValue(max(camera->sensor->getMinVRes(), round((UInt32)ui->spinVRes->value(), camera->sensor->getVResIncrement())));
+	ui->spinVRes->setValue(std::max(camera->sensor->getMinVRes(), round((UInt32)ui->spinVRes->value(), camera->sensor->getVResIncrement())));
 
 	updateFramePreview();
 	updateInfoText();
