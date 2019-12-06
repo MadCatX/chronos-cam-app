@@ -14,12 +14,13 @@
  *  You should have received a copy of the GNU General Public License       *
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.   *
  ****************************************************************************/
-#include "util.h"
 #include "camera.h"
 #include "cameraRegisters.h"
 
 #include "ramwindow.h"
 #include "ui_ramwindow.h"
+
+#include "util.h"
 
 ramWindow::ramWindow(QWidget *parent, Camera * cameraInst) :
 	QWidget(parent),
