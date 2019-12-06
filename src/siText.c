@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <math.h>
 
+static
 char prefixes[17] = {'y', 'z', 'a', 'f', 'p', 'n', 'u', 'm', '\0', 'k', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'}; //10**0 is position 8
 
 
