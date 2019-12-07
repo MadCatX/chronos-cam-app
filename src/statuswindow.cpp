@@ -19,6 +19,8 @@
 #include "statuswindow.h"
 #include "ui_statuswindow.h"
 
+#include <QDesktopWidget>
+
 StatusWindow::StatusWindow(QWidget *parent) :
 	QWidget(parent),
 	ui(new Ui::StatusWindow)

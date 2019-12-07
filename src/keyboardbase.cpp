@@ -2,6 +2,10 @@
 #include "camLineEdit.h"
 #include "camspinbox.h"
 
+#include <QApplication>
+#include <QDesktopWidget>
+#include <QTextEdit>
+
 keyboardBase::keyboardBase(QWidget *parent) :
 	QWidget(parent)
 {
