@@ -30,7 +30,7 @@ public:
 	QWidget * getLastFocsedWidget() {return lastFocusedWidget;}
 	~keyboardBase();
 	QWidget *lastFocusedWidget;
-    QSignalMapper signalMapper;
+	QSignalMapper signalMapper;
 
 public slots:
 	void            show();
