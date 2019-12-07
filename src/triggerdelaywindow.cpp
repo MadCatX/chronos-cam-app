@@ -30,7 +30,7 @@ triggerDelayWindow::triggerDelayWindow(QWidget *parent, Camera * cameraInst, Ima
 	  position = (camera->triggerPostSeconds / period);
     else if(camera->getTriggerDelayConstant() == TRIGGERDELAY_FRAMES)
 	  position = (camera->triggerPostFrames);
-    ui->horizontalSlider->setMaximum(camera->maxPostFramesRatio * max(recLenFrames, position));
+    ui->horizontalSlider->setMaximum(camera->maxPostFramesRatio * std::max(recLenFrames, position));
     ui->horizontalSlider->setHighlightRegion(0, recLenFrames);
     updateControls(position);
 }
@@ -47,7 +47,7 @@ void triggerDelayWindow::on_cmdOK_clicked()
                                   ui->spinPostSeconds->value(),
 						    ui->spinPostFrames->value());
     camera->io->setTriggerDelayFrames(ui->spinPostFrames->value());
-    camera->maxPostFramesRatio = ui->horizontalSlider->maximum() / (double)max(recLenFrames, ui->horizontalSlider->value());
+    camera->maxPostFramesRatio = ui->horizontalSlider->maximum() / (double)std::max(recLenFrames, (UInt32)ui->horizontalSlider->value());
     close();
 }
 
@@ -82,8 +82,8 @@ void triggerDelayWindow::on_cmdHundredPercent_clicked()
 
 void triggerDelayWindow::updateControls(UInt32 postTriggerFrames)
 {
-    UInt32 pretriggerFrames  = max((Int32)recLenFrames - (Int32)postTriggerFrames, 0);
-    UInt32 preRecFrames = max((Int32)postTriggerFrames - (Int32)recLenFrames, 0);
+    UInt32 pretriggerFrames  = std::max((Int32)recLenFrames - (Int32)postTriggerFrames, 0);
+    UInt32 preRecFrames = std::max((Int32)postTriggerFrames - (Int32)recLenFrames, 0);
 
     if(postTriggerFrames > ui->horizontalSlider->maximum())
         ui->horizontalSlider->setMaximum(postTriggerFrames);
@@ -136,7 +136,7 @@ void triggerDelayWindow::on_spinPreRecFrames_valueChanged(int arg1)
 void triggerDelayWindow::on_cmdResetToDefaults_clicked()
 {
     updateControls(0);
-    ui->horizontalSlider->setMaximum(max(ui->spinPostFrames->value(), recLenFrames));
+    ui->horizontalSlider->setMaximum(std::max((UInt32)ui->spinPostFrames->value(), recLenFrames));
 }
 
 void triggerDelayWindow::on_cmdMorePreRecTime_clicked()

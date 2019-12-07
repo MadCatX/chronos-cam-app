@@ -17,6 +17,7 @@
  ****************************************************************************/
 #include "frameGeometry.h"
 #include "sensor.h"
+#include "util.h"
 
 /* Default implementations and helper functions for the ImageSensor class. */
 
@@ -64,6 +65,6 @@ UInt32 ImageSensor::getActualIntegrationTime(double target, UInt32 period, Frame
 	UInt32 minIntTime = getMinIntegrationTime(period, frameSize);
 	UInt32 maxIntTime = getMaxIntegrationTime(period, frameSize);
 
-	return within(intTime, minIntTime, maxIntTime);
+	return std::clamp(intTime, minIntTime, maxIntTime);
 }
 

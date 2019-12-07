@@ -941,7 +941,7 @@ void UtilWindow::on_chkShippingMode_clicked()
 {
 	bool state = ui->chkShippingMode->isChecked();
 
-	if(state == TRUE){
+	if(state){
 		QMessageBox::information(this, "Shipping Mode Enabled","On the next restart, the AC adapter must be plugged in to turn the camera on.", QMessageBox::Ok);
 	}
 

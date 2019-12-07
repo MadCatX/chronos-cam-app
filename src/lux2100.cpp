@@ -280,7 +280,7 @@ UInt32 LUX2100::getMinWavetablePeriod(FrameGeometry *frameSize, UInt32 wtSize)
 	/* Updated to v3.0 datasheet and computed directly in LUX2100 clocks. */
 	unsigned int tRead = frameSize->hRes / LUX2100_HRES_INCREMENT;
 	unsigned int tTx = 50; /* TODO: Need to check the FPGA build for the TXN pulse width. */
-	unsigned int tRow = max(tRead + LUX2100_MIN_HBLANK, wtSize + 3);
+	unsigned int tRow = std::max(tRead + LUX2100_MIN_HBLANK, wtSize + 3);
 	unsigned int tFovf = LUX2100_SOF_DELAY + wtSize + LUX2100_LV_DELAY + 10;
 	unsigned int tFovfb = 50; /* TODO: It's not entirely clear what the minimum limit is here. */
 	unsigned int tFrame = tRow * (frameSize->vRes + frameSize->vDarkRows) + tTx + tFovf + tFovfb - LUX2100_MIN_HBLANK;
@@ -328,7 +328,7 @@ UInt32 LUX2100::getActualFramePeriod(double targetPeriod, FrameGeometry *size)
 	UInt32 minPeriod = getMinFramePeriod(size);
 	UInt32 maxPeriod = LUX2100_MAX_SLAVE_PERIOD;
 
-	return within(clocks, minPeriod, maxPeriod);
+	return std::clamp(clocks, minPeriod, maxPeriod);
 }
 
 void LUX2100::updateWavetableSetting(void)
@@ -365,11 +365,11 @@ UInt32 LUX2100::setFramePeriod(UInt32 period, FrameGeometry *size)
 	UInt32 minPeriod = getMinFramePeriod(size);
 	UInt32 maxPeriod = LUX2100_MAX_SLAVE_PERIOD;
 
-	currentPeriod = within(period, minPeriod, maxPeriod);
+	currentPeriod = std::clamp(period, minPeriod, maxPeriod);
 
 	// Set the timing generator to handle the frame and line period
 	updateWavetableSetting();
-	gpmc->write16(SENSOR_LINE_PERIOD_ADDR, max((size->hRes / LUX2100_HRES_INCREMENT)+2, (wavetableSize + 3)) - 1);
+	gpmc->write16(SENSOR_LINE_PERIOD_ADDR, std::max((size->hRes / LUX2100_HRES_INCREMENT)+2, (wavetableSize + 3)) - 1);
 	gpmc->write32(IMAGER_FRAME_PERIOD_ADDR, period);
 	return currentPeriod;
 }
@@ -400,7 +400,7 @@ UInt32 LUX2100::setIntegrationTime(UInt32 intTime, FrameGeometry *size)
 	//Set integration time to within limits
 	UInt32 maxIntTime = getMaxIntegrationTime(currentPeriod, size);
 	UInt32 minIntTime = getMinIntegrationTime(currentPeriod, size);
-	currentExposure = within(intTime, minIntTime, maxIntTime);
+	currentExposure = std::clamp(intTime, minIntTime, maxIntTime);
 
 	setSlaveExposure(currentExposure);
 	return currentExposure;
@@ -420,7 +420,7 @@ UInt32 LUX2100::getIntegrationTime(void)
 void LUX2100::setSlaveExposure(UInt32 exposure)
 {
 	//hack to fix line issue. Not perfect, need to properly register this on the sensor clock.
-	double linePeriod = max((currentRes.hRes / LUX2100_HRES_INCREMENT)+2, (wavetableSize + 3)) * 1.0/LUX2100_SENSOR_CLOCK;	//Line period in seconds
+	double linePeriod = std::max((currentRes.hRes / LUX2100_HRES_INCREMENT)+2, (wavetableSize + 3)) * 1.0/LUX2100_SENSOR_CLOCK;	//Line period in seconds
 	UInt32 startDelay = (double)startDelaySensorClocks * LUX2100_TIMING_CLOCK_FREQ / LUX2100_SENSOR_CLOCK;
 	double targetExp = (double)exposure / 100000000.0;
 	UInt32 expLines = round(targetExp / linePeriod);
@@ -660,7 +660,7 @@ void LUX2100::offsetCorrectionIteration(FrameGeometry *geometry, int *offsets, U
 			//HACK Pushing the offset a little lower to make up for the lack of iterations.
 			offsets[col] = offsets[col] - (avg - dev - 64) / 2;
 		}
-		offsets[col] = within(offsets[col], -1023, 1023);
+		offsets[col] = std::clamp(offsets[col], -1023, 1023);
 		setADCOffset(col, offsets[col]);
 	}
 

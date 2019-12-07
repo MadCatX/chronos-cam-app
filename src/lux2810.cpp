@@ -265,7 +265,7 @@ UInt32 LUX2810::getMinFramePeriod(FrameGeometry *frameSize)
 	double tRead = (double)(frameSize->hRes / LUX2810_HRES_INCREMENT) * LUX2810_CLOCK_PERIOD;
 	double tHBlank = 2.0 * LUX2810_CLOCK_PERIOD;
 	double tWavetable = wtSize * LUX2810_CLOCK_PERIOD;
-	double tRow = max(tRead+tHBlank, tWavetable+3*LUX2810_CLOCK_PERIOD);
+	double tRow = std::max(tRead+tHBlank, tWavetable+3*LUX2810_CLOCK_PERIOD);
 	double tTx = 50 * LUX2810_CLOCK_PERIOD;
 	double tFovf = 50 * LUX2810_CLOCK_PERIOD;
 	double tFovb = (50) * LUX2810_CLOCK_PERIOD;//Duration between PRSTN falling and TXN falling (I think)
@@ -286,7 +286,7 @@ UInt32 LUX2810::getActualFramePeriod(double targetPeriod, FrameGeometry *size)
 	UInt32 minPeriod = getMinFramePeriod(size);
 	UInt32 maxPeriod = LUX2810_MAX_SLAVE_PERIOD;
 
-	return within(clocks, minPeriod, maxPeriod);
+	return std::clamp(clocks, minPeriod, maxPeriod);
 }
 
 UInt32 LUX2810::setFramePeriod(UInt32 period, FrameGeometry *size)
@@ -295,10 +295,10 @@ UInt32 LUX2810::setFramePeriod(UInt32 period, FrameGeometry *size)
 	UInt32 minPeriod = getMinFramePeriod(size);
 	UInt32 maxPeriod = LUX2810_MAX_SLAVE_PERIOD;
 
-	currentPeriod = within(period, minPeriod, maxPeriod);
+	currentPeriod = std::clamp(period, minPeriod, maxPeriod);
 
 	// Set the timing generator to handle the frame and line period
-	gpmc->write16(SENSOR_LINE_PERIOD_ADDR, max((size->hRes / LUX2810_HRES_INCREMENT)+2, (wavetableSize + 3)) - 1);
+	gpmc->write16(SENSOR_LINE_PERIOD_ADDR, std::max((size->hRes / LUX2810_HRES_INCREMENT)+2, (wavetableSize + 3)) - 1);
 	gpmc->write32(IMAGER_FRAME_PERIOD_ADDR, period);
 	return currentPeriod;
 }
@@ -329,7 +329,7 @@ UInt32 LUX2810::setIntegrationTime(UInt32 intTime, FrameGeometry *size)
 	//Set integration time to within limits
 	UInt32 maxIntTime = getMaxIntegrationTime(currentPeriod, size);
 	UInt32 minIntTime = getMinIntegrationTime(currentPeriod, size);
-	currentExposure = within(intTime, minIntTime, maxIntTime);
+	currentExposure = std::clamp(intTime, minIntTime, maxIntTime);
 
 	setSlaveExposure(currentExposure);
 	return currentExposure;
@@ -349,7 +349,7 @@ UInt32 LUX2810::getIntegrationTime(void)
 void LUX2810::setSlaveExposure(UInt32 exposure)
 {
 	//hack to fix line issue. Not perfect, need to properly register this on the sensor clock.
-	double linePeriod = max((currentRes.hRes / LUX2810_HRES_INCREMENT)+2, (wavetableSize + 3)) * 1.0/LUX2810_SENSOR_CLOCK;	//Line period in seconds
+	double linePeriod = std::max((currentRes.hRes / LUX2810_HRES_INCREMENT)+2, (wavetableSize + 3)) * 1.0/LUX2810_SENSOR_CLOCK;	//Line period in seconds
 	UInt32 startDelay = (double)startDelaySensorClocks * LUX2810_TIMING_CLOCK / LUX2810_SENSOR_CLOCK;
 	double targetExp = (double)exposure / 100000000.0;
 	UInt32 expLines = round(targetExp / linePeriod);

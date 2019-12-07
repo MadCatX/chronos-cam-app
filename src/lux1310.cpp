@@ -28,7 +28,7 @@
 #include "defines.h"
 #include "cameraRegisters.h"
 
-#include "types.h"
+#include "util.h"
 #include "lux1310.h"
 
 #include <QSettings>
@@ -374,7 +374,7 @@ UInt32 LUX1310::getMinWavetablePeriod(FrameGeometry *frameSize, UInt32 wtSize)
 	/* Updated to v3.0 datasheet and computed directly in LUX1310 clocks. */
 	unsigned int tRead = frameSize->hRes / LUX1310_HRES_INCREMENT;
 	unsigned int tTx = 25; /* Hard-coded to 25 clocks in the FPGA, should actually be at least 350ns. */
-	unsigned int tRow = max(tRead + LUX1310_MIN_HBLANK, wtSize + 3);
+	unsigned int tRow = std::max(tRead + LUX1310_MIN_HBLANK, wtSize + 3);
 	unsigned int tFovf = LUX1310_SOF_DELAY + wtSize + LUX1310_LV_DELAY + 10;
 	unsigned int tFovfb = 41; /* Duration between PRSTN falling and TXN falling (I think) */
 	unsigned int tFrame = tRow * (frameSize->vRes + frameSize->vDarkRows) + tTx + tFovf + tFovfb - LUX1310_MIN_HBLANK;
@@ -416,7 +416,7 @@ UInt32 LUX1310::getActualFramePeriod(double target, FrameGeometry *size)
 	UInt32 minPeriod = getMinFramePeriod(size);
 	UInt32 maxPeriod = LUX1310_MAX_SLAVE_PERIOD;
 
-	return within(clocks, minPeriod, maxPeriod);
+	return std::clamp(clocks, minPeriod, maxPeriod);
 }
 
 UInt32 LUX1310::setFramePeriod(UInt32 period, FrameGeometry *size)
@@ -425,11 +425,11 @@ UInt32 LUX1310::setFramePeriod(UInt32 period, FrameGeometry *size)
 	UInt32 minPeriod = getMinFramePeriod(size);
 	UInt32 maxPeriod = LUX1310_MAX_SLAVE_PERIOD;
 
-	currentPeriod = within(period, minPeriod, maxPeriod);
+	currentPeriod = std::clamp(period, minPeriod, maxPeriod);
 
 
 	updateWavetableSetting(false);
-	gpmc->write16(SENSOR_LINE_PERIOD_ADDR, max((size->hRes / LUX1310_HRES_INCREMENT)+2, (wavetableSize + 3)) - 1);
+	gpmc->write16(SENSOR_LINE_PERIOD_ADDR, std::max((size->hRes / LUX1310_HRES_INCREMENT)+2, (wavetableSize + 3)) - 1);
 	gpmc->write32(IMAGER_FRAME_PERIOD_ADDR, period);
 	return currentPeriod;
 }
@@ -460,7 +460,7 @@ UInt32 LUX1310::setIntegrationTime(UInt32 intTime, FrameGeometry *size)
 	//Set integration time to within limits
 	UInt32 maxIntTime = getMaxIntegrationTime(currentPeriod, size);
 	UInt32 minIntTime = getMinIntegrationTime(currentPeriod, size);
-	currentExposure = within(intTime, minIntTime, maxIntTime);
+	currentExposure = std::clamp(intTime, minIntTime, maxIntTime);
 
 	setSlaveExposure(currentExposure);
 	return currentExposure;
@@ -480,7 +480,7 @@ UInt32 LUX1310::getIntegrationTime(void)
 void LUX1310::setSlaveExposure(UInt32 exposure)
 {
 	//hack to fix line issue. Not perfect, need to properly register this on the sensor clock.
-	double linePeriod = max((currentRes.hRes / LUX1310_HRES_INCREMENT)+2, (wavetableSize + 3)) * 1.0/LUX1310_SENSOR_CLOCK;	//Line period in seconds
+	double linePeriod = std::max((currentRes.hRes / LUX1310_HRES_INCREMENT)+2, (wavetableSize + 3)) * 1.0/LUX1310_SENSOR_CLOCK;	//Line period in seconds
 	UInt32 startDelay = (double)startDelaySensorClocks * LUX1310_TIMING_CLOCK / LUX1310_SENSOR_CLOCK;
 	double targetExp = (double)exposure / 100000000.0;
 	UInt32 expLines = round(targetExp / linePeriod);
@@ -762,7 +762,7 @@ void LUX1310::offsetCorrectionIteration(FrameGeometry *geometry, int *offsets, U
 		UInt16 dev = adcStdDev[col];
 
 		offsets[col] = offsets[col] - (avg - dev - 32) / 2;
-		offsets[col] = within(offsets[col], -1023, 1023);
+		offsets[col] = std::clamp(offsets[col], -1023, 1023);
 		setADCOffset(col, offsets[col]);
 	}
 }

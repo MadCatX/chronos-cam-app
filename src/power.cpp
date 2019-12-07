@@ -1,6 +1,7 @@
 
 #include <QSettings>
 #include "power.h"
+#include "util.h"
 
 Power::Power(QObject *parent) : QObject(parent)
 {
@@ -144,11 +145,11 @@ double Power::getBatteryPercent()
 {
 	if (flags & POWER_FLAG_BATT_CHARGING) {
 		/* Charging */
-		return within(((double)battVoltageCam/1000.0 - 10.75) / (12.4 - 10.75) * 80, 0.0, 80.0) +
-				20 - 20*within(((double)battCurrentCam/1000.0 - 0.1) / (1.28 - 0.1), 0.0, 1.0);
+		return std::clamp(((double)battVoltageCam/1000.0 - 10.75) / (12.4 - 10.75) * 80, 0.0, 80.0) +
+				20 - 20*std::clamp(((double)battCurrentCam/1000.0 - 0.1) / (1.28 - 0.1), 0.0, 1.0);
 	}
 	else {
 		/* Discharging */
-		return within(((double)battVoltageCam/1000.0 - 9.75) / (11.8 - 9.75) * 100, 0.0, 100.0);
+		return std::clamp(((double)battVoltageCam/1000.0 - 9.75) / (11.8 - 9.75) * 100, 0.0, 100.0);
 	}
 }
