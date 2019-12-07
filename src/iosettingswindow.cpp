@@ -93,7 +93,7 @@ void IOSettingsWindow::updateIO()
 	char str[100];
 	UInt32 input = camera->io->getIn();
 
-	sprintf(str, "IO1: %s\r\nIO2: %s\r\nIn3: %s", input & (1 << 0) ? "Hi" : "Lo",
+	snprintf(str, sizeof(str), "IO1: %s\r\nIO2: %s\r\nIn3: %s", input & (1 << 0) ? "Hi" : "Lo",
 												input & (1 << 1) ? "Hi" : "Lo",
 												input & (1 << 2) ? "Hi" : "Lo");
 

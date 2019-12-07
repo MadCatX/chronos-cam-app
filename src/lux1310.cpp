@@ -795,7 +795,7 @@ void LUX1310::adcOffsetTraining(FrameGeometry *size, UInt32 address, UInt32 numF
 
 	debuglen = 0;
 	for (int col=0; col < LUX1310_HRES_INCREMENT; col++) {
-		debuglen += sprintf(debugstr + debuglen, " %+4d", offsets[col]);
+		debuglen += snprintf(debugstr + debuglen, sizeof(debugstr) - debuglen, " %+4d", offsets[col]);
 	}
 	qDebug("Calculated ADC Offsets:%s", debugstr);
 	qDebug("Writing ADC offsets to %s", filename.c_str());

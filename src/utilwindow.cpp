@@ -173,15 +173,15 @@ void UtilWindow::on_cmdSWUpdate_clicked()
 	for(itr = 1; itr <= 4; itr++)
 	{
 		//Look for the update on sda
-		sprintf(location, "/media/sda%d/camUpdate/update.sh", itr);
+		snprintf(location, sizeof(location), "/media/sda%d/camUpdate/update.sh", itr);
 		if((retval = updateSoftware(location)) != CAMERA_FILE_NOT_FOUND) return;
 		
 		//Also look for the update on sdb, as the usb is sometimes mounted there instead of sda
-		sprintf(location, "/media/sdb%d/camUpdate/update.sh", itr);
+		snprintf(location, sizeof(location), "/media/sdb%d/camUpdate/update.sh", itr);
 		if((retval = updateSoftware(location)) != CAMERA_FILE_NOT_FOUND) return;
 		
 		//Look for the update on the SD card
-		sprintf(location, "/media/mmcblk1p%d/camUpdate/update.sh", itr);
+		snprintf(location, sizeof(location), "/media/mmcblk1p%d/camUpdate/update.sh", itr);
 		if((retval = updateSoftware(location)) != CAMERA_FILE_NOT_FOUND) return;
 	}
 
@@ -212,7 +212,7 @@ int UtilWindow::updateSoftware(char * updateLocation){
 
 		UInt32 retVal = system(updateLocation);
 		QMessageBox msg;
-		sprintf(mesg, "Update complete! Please restart camera to complete update.");
+		snprintf(mesg, sizeof(mesg), "Update complete! Please restart camera to complete update.");
 		msg.setText(mesg);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();
@@ -356,7 +356,7 @@ void UtilWindow::on_cmdColumnGain_clicked()
 	{
 		sw.hide();
 		QMessageBox msg;
-		sprintf(text, "Error during gain calibration, error %d: %s", retVal, errorCodeString(retVal));
+		snprintf(text, sizeof(text), "Error during gain calibration, error %d: %s", retVal, errorCodeString(retVal));
 		msg.setText(text);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();
@@ -365,7 +365,7 @@ void UtilWindow::on_cmdColumnGain_clicked()
 	{
 		sw.hide();
 		QMessageBox msg;
-		sprintf(text, "Column gain calibration was successful");
+		snprintf(text, sizeof(text), "Column gain calibration was successful");
 		msg.setText(text);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();
@@ -397,7 +397,7 @@ void UtilWindow::on_cmdBlackCalAll_clicked()
 	if(SUCCESS != retVal)
 	{
 		QMessageBox msg;
-		sprintf(text, "Error during black calibration, error %d: %s", retVal, errorCodeString(retVal));
+		snprintf(text, sizeof(text), "Error during black calibration, error %d: %s", retVal, errorCodeString(retVal));
 		msg.setText(text);
 		msg.setWindowTitle(title);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
@@ -406,7 +406,7 @@ void UtilWindow::on_cmdBlackCalAll_clicked()
 	else
 	{
 		QMessageBox msg;
-		sprintf(text, "Black cal of all standard resolutions was successful");
+		snprintf(text, sizeof(text), "Black cal of all standard resolutions was successful");
 		msg.setText(text);
 		msg.setWindowTitle(title);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
@@ -489,7 +489,7 @@ void UtilWindow::on_cmdAutoCal_clicked()
 	{
 		sw.hide();
 		QMessageBox msg;
-		sprintf(text, "Error during black calibration, error %d: %s", retVal, errorCodeString(retVal));
+		snprintf(text, sizeof(text), "Error during black calibration, error %d: %s", retVal, errorCodeString(retVal));
 		msg.setText(text);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();
@@ -506,7 +506,7 @@ void UtilWindow::on_cmdAutoCal_clicked()
 	if(SUCCESS != retVal) {
 		sw.hide();
 		QMessageBox msg;
-		sprintf(text, "Error during gain calibration, error %d: %s", retVal, errorCodeString(retVal));
+		snprintf(text, sizeof(text), "Error during gain calibration, error %d: %s", retVal, errorCodeString(retVal));
 		msg.setText(text);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();
@@ -575,7 +575,6 @@ void UtilWindow::on_cmdClose_5_clicked()
 
 void UtilWindow::on_cmdWhiteRef_clicked()
 {
-	char text[100];
 	Int32 retVal;
 	//Turn on calibration light
 	camera->io->setOutLevel((1 << 1));	//Turn on output drive
@@ -584,8 +583,9 @@ void UtilWindow::on_cmdWhiteRef_clicked()
 
 	if(SUCCESS != retVal)
 	{
+		char text[100];
 		QMessageBox msg;
-		sprintf(text, "Error during white reference calibration, error %d: %s", retVal, errorCodeString(retVal));
+		snprintf(text, 100, "Error during white reference calibration, error %d: %s", retVal, errorCodeString(retVal));
 		msg.setText(text);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();
@@ -669,9 +669,9 @@ void UtilWindow::on_cmdSaveCal_clicked()
 	sw.show();
 	QCoreApplication::processEvents();
 
-	sprintf(path, "/media/sda1/cal_%s", camera->getSerialNumber());
+	snprintf(path, sizeof(path), "/media/sda1/cal_%s", camera->getSerialNumber());
 
-	sprintf(str, "tar -cf %s.tar cal", path);
+	snprintf(str, sizeof(str), "tar -cf %s.tar cal", path);
 
 	retVal = system(str);	//tar cal files
 

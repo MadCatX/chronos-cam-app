@@ -244,8 +244,8 @@ void saveSettingsWindow::refreshDriveList()
 						part = 1;
 
 					//Produce the paths to read the model and vendor strings
-					sprintf(modelPath, "/sys/block/%s/device/model", device);
-					sprintf(vendorPath, "/sys/block/%s/device/vendor", device);
+					snprintf(modelPath, sizeof(modelPath), "/sys/block/%s/device/model", device);
+					snprintf(vendorPath, sizeof(vendorPath), "/sys/block/%s/device/vendor", device);
 
 					//Read the model and vendor strings for this block device
 					fp = fopen(modelPath, "r");
@@ -276,7 +276,7 @@ void saveSettingsWindow::refreshDriveList()
 					for(i = strlen(model) - 1; ' ' == model[i] || '\n' == model[i]; i--) {};	//Search back from the end and put a null at the first trailing space
 					model[i + 1] = '\0';
 
-					sprintf(drive, "%s (%s %s Partition %d)", mnt.mnt_dir, vendor, model, part);
+					snprintf(drive, sizeof(drive), "%s (%s %s Partition %d)", mnt.mnt_dir, vendor, model, part);
 				}
 				else
 				{
@@ -287,7 +287,7 @@ void saveSettingsWindow::refreshDriveList()
 						part = atoi(mnt.mnt_dir + 15);
 					else
 						part = 1;
-					sprintf(drive, "%s (SD Card Partition %d)", mnt.mnt_dir, part);
+					snprintf(drive, sizeof(drive), "%s (SD Card Partition %d)", mnt.mnt_dir, part);
 
 				}
 
@@ -339,7 +339,7 @@ void saveSettingsWindow::updateBitrate()
 		UInt32 bitrate = std::min((UInt32)ui->spinBitrate->value() * camera->recordingData.is.geometry.hRes * camera->recordingData.is.geometry.vRes * frameRate,
 					  std::min(60000000U, (UInt32)(ui->spinMaxBitrate->value() * 1000000.0)) * frameRate / 60);	//Max of 60Mbps
 
-		sprintf(str, "%4.2fMbps @\n%dx%d %dfps", (double)bitrate / 1000000.0, camera->recordingData.is.geometry.hRes, camera->recordingData.is.geometry.vRes, frameRate);
+		snprintf(str, sizeof(str), "%4.2fMbps @\n%dx%d %dfps", (double)bitrate / 1000000.0, camera->recordingData.is.geometry.hRes, camera->recordingData.is.geometry.vRes, frameRate);
 		ui->lblBitrate->setText(str);
 	}
 	else {

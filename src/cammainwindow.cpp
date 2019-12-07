@@ -472,7 +472,7 @@ void CamMainWindow::updateCurrentSettingsLabel()
 	char fpsString[30];
 	char expString[30];
 
-	sprintf(fpsString, QString::number(1 / framePeriod).toLatin1());
+	snprintf(fpsString, sizeof(fpsString), QString::number(1 / framePeriod).toLatin1());
 	getSIText(expString, expPeriod, 4, DEF_SI_OPTS, 10);
 	shutterAngle = std::max(shutterAngle, 1); //to prevent 0 degrees from showing on the label if the current exposure is less than 1/360'th of the frame period.
 
@@ -486,7 +486,7 @@ void CamMainWindow::updateCurrentSettingsLabel()
 		sprintf(battStr, "No Batt");
 	}
 
-	sprintf(str, "%s\r\n%ux%u %sfps\r\nExp %ss (%u\xb0)", battStr, is.geometry.hRes, is.geometry.vRes, fpsString, expString, shutterAngle);
+	snprintf(str, sizeof(str), "%s\r\n%ux%u %sfps\r\nExp %ss (%u\xb0)", battStr, is.geometry.hRes, is.geometry.vRes, fpsString, expString, shutterAngle);
 	ui->lblCurrent->setText(str);
 }
 
@@ -545,16 +545,16 @@ void CamMainWindow::on_cmdDPCButton_clicked()
 	if (retVal != SUCCESS) {
 		QMessageBox msg;
 		if (retVal == CAMERA_DEAD_PIXEL_RECORD_ERROR)
-			sprintf(text, "Failed dead pixel detection, error %d", retVal);
+			snprintf(text, sizeof(text), "Failed dead pixel detection, error %d", retVal);
 		else if (retVal == CAMERA_DEAD_PIXEL_FAILED)
-			sprintf(text, "Failed dead pixel detection\n%d dead pixels found on sensor\nMax value: %d", resultCount, resultMax);
+			snprintf(text, sizeof(100), "Failed dead pixel detection\n%d dead pixels found on sensor\nMax value: %d", resultCount, resultMax);
 		msg.setText(text);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();
 	}
 	else {
 		QMessageBox msg;
-		sprintf(text, "Dead pixel detection passed!\nMax deviation: %d", resultMax);
+		snprintf(text, sizeof(text), "Dead pixel detection passed!\nMax deviation: %d", resultMax);
 		msg.setText(text);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();

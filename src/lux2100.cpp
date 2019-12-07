@@ -670,20 +670,20 @@ void LUX2100::offsetCorrectionIteration(FrameGeometry *geometry, int *offsets, U
 	if (iter == 0) {
 		debuglen = 0;
 		for (int col=0; col < LUX2100_HRES_INCREMENT; col++) {
-			debuglen += sprintf(debugstr + debuglen, " %+4d", adcAverage[col]);
+			debuglen += snprintf(debugstr + debuglen, sizeof(debugstr) - debuglen, " %+4d", adcAverage[col]);
 		}
 		qDebug("ADC Initial:%s", debugstr);
 
 		debuglen = 0;
 		for (int col=0; col < LUX2100_HRES_INCREMENT; col++) {
-			debuglen += sprintf(debugstr + debuglen, " %+4d", adcStdDev[col]);
+			debuglen += snprintf(debugstr + debuglen, sizeof(debugstr) - debuglen, " %+4d", adcStdDev[col]);
 		}
 		qDebug("ADC StdDev: %s", debugstr);
 	}
 
 	debuglen = 0;
 	for (int col=0; col < LUX2100_HRES_INCREMENT; col++) {
-		debuglen += sprintf(debugstr + debuglen, " %+4d", offsets[col]);
+		debuglen += snprintf(debugstr + debuglen, sizeof(debugstr) - debuglen, " %+4d", offsets[col]);
 	}
 	qDebug("ADC Offsets:%s", debugstr);
 }

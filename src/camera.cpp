@@ -228,7 +228,7 @@ CameraErrortype Camera::init(GPMC * gpmcInst, Video * vinstInst, ImageSensor * s
 		int i;
 		bool fileDirFoundOnUSB = false;
 		for (i = 1; i <= 3; i++) {
-			sprintf(vinst->fileDirectory, "/media/sda%d", i);
+			snprintf(vinst->fileDirectory, sizeof(vinst->fileDirectory), "/media/sda%d", i);
 			if (path_is_mounted(vinst->fileDirectory)) {
 				fileDirFoundOnUSB = true;
 				break;

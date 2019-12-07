@@ -458,7 +458,7 @@ void playbackWindow::keyPressEvent(QKeyEvent *ev)
 void playbackWindow::updateStatusText()
 {
 	char text[100];
-	sprintf(text, "Frame %d/%d\r\nMark start %d\r\nMark end %d", playFrame + 1, totalFrames, markInFrame, markOutFrame);
+	snprintf(text, sizeof(text), "Frame %d/%d\r\nMark start %d\r\nMark end %d", playFrame + 1, totalFrames, markInFrame, markOutFrame);
 	ui->lblInfo->setText(text);
 }
 
@@ -491,7 +491,7 @@ void playbackWindow::updatePlayFrame()
 	if (st.state != VIDEO_STATE_FILESAVE) {
 		st.framerate = (playbackExponent >= 0) ? (60 << playbackExponent) : 60.0 / (1 - playbackExponent);
 	}
-	sprintf(playRateStr, "%.1ffps", st.framerate);
+	snprintf(playRateStr, sizeof(playRateStr), "%.1ffps", st.framerate);
 	ui->lblFrameRate->setText(playRateStr);
 }
 

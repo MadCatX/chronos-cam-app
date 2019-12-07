@@ -95,7 +95,7 @@ void MainWindow::on_cmdWrite_clicked()
 								<< ((wl >> 16) & 0xFF)
 								<< ((wl >> 8) & 0xFF)
 								<< (wl & 0xFF);
-	sprintf(msg, "wl_dyndly = %d, %d, %d, %d, %d, %d, %d, %d",
+	snprintf(msg, sizeof(msg), "wl_dyndly = %d, %d, %d, %d, %d, %d, %d, %d",
 			(UInt32)((wl >> 56) & 0xFF),
 			(UInt32)((wl >> 48) & 0xFF),
 			(UInt32)((wl >> 40) & 0xFF),
@@ -285,7 +285,7 @@ void MainWindow::on_cmdFPN_clicked()
 	qDebug() <<"eeprom_read_large returned" << retVal;
 
 	::close(file);
-	sprintf(msg, "Read = %x, %x, %x, %x, %x, %x, %x, %x",
+	snprintf(msg, sizeof(msg), "Read = %x, %x, %x, %x, %x, %x, %x, %x",
 			(UInt32)buf[0],
 			(UInt32)buf[1],
 			(UInt32)buf[2],
