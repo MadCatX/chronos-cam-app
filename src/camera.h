@@ -260,7 +260,7 @@ private:
 	void terminateRecord(void);
 	void writeSeqPgmMem(SeqPgmMemWord pgmWord, UInt32 address);
 	void setRecRegion(UInt32 start, UInt32 count, FrameGeometry *geometry);
-	bool readIsColor(void);
+	bool readIsColor(CameraErrortype &err);
 public:
 	void setFocusPeakThresholdLL(UInt32 thresh);
 	UInt32 getFocusPeakThresholdLL(void);

@@ -107,11 +107,13 @@ CameraErrortype Camera::init(GPMC * gpmcInst, Video * vinstInst, ImageSensor * s
 		else if (strcasecmp(envColor, "TRUE") == 0) isColor = true;
 		else if (strcasecmp(envColor, "MONO") == 0) isColor = false;
 		else if (strcasecmp(envColor, "FALSE") == 0) isColor = false;
-		else isColor = readIsColor();
+		else isColor = readIsColor(retVal);
 	}
 	else {
-		isColor = readIsColor();
+		isColor = readIsColor(retVal);
 	}
+	if (retVal != SUCCESS)
+		return retVal;
 
 	//dummy read
 	if(getRecording())

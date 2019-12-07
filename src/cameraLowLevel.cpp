@@ -79,19 +79,23 @@ void Camera::setRecRegion(UInt32 start, UInt32 count, FrameGeometry *geometry)
  * returns: true for color, false for mono
  **/
 
-bool Camera::readIsColor(void)
+bool Camera::readIsColor(CameraErrortype &err)
 {
 	Int32 colorSelFD;
 
 	colorSelFD = open("/sys/class/gpio/gpio34/value", O_RDONLY);
 
-	if (-1 == colorSelFD)
-		return CAMERA_FILE_ERROR;
+	if (-1 == colorSelFD) {
+		err = CAMERA_FILE_ERROR;
+		return false;
+	}
 
 	char buf[2];
 
 	lseek(colorSelFD, 0, SEEK_SET);
 	read(colorSelFD, buf, sizeof(buf));
+
+	err = SUCCESS;
 
 	return ('1' == buf[0]) ? true : false;
 
