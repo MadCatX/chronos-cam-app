@@ -27,7 +27,7 @@ Power::Power(QObject *parent) : QObject(parent)
 	fanPWM = 0;
 
 	/* Disable Shipping Mode and refresh battery data on boot. */
-	setShippingMode(FALSE);
+	setShippingMode(false);
 	refreshBatteryData();
 }
 
@@ -117,10 +117,10 @@ void Power::on_socket_readyRead()
 		appSettings.setValue("camera/autoPowerMode", AUTO_POWER_BOTH);
 	}
 	else if (strcmp(buf,"shipping mode enabled") == 0) {
-		appSettings.setValue("camera/shippingMode", TRUE);
+		appSettings.setValue("camera/shippingMode", true);
 	}
 	else if (strcmp(buf,"shipping mode disabled") == 0) {
-		appSettings.setValue("camera/shippingMode", FALSE);
+		appSettings.setValue("camera/shippingMode", false);
 	}
 	/* Otherwise, it might be battery data. */
 	else {
