@@ -81,9 +81,7 @@ void Camera::setRecRegion(UInt32 start, UInt32 count, FrameGeometry *geometry)
 
 bool Camera::readIsColor(CameraErrortype &err)
 {
-	Int32 colorSelFD;
-
-	colorSelFD = open("/sys/class/gpio/gpio34/value", O_RDONLY);
+	auto colorSelFD = open("/sys/class/gpio/gpio34/value", O_RDONLY);
 
 	if (-1 == colorSelFD) {
 		err = CAMERA_FILE_ERROR;
@@ -97,9 +95,8 @@ bool Camera::readIsColor(CameraErrortype &err)
 
 	err = SUCCESS;
 
-	return ('1' == buf[0]) ? true : false;
-
 	close(colorSelFD);
+	return '1' == buf[0];
 }
 
 void Camera::setFocusPeakThresholdLL(UInt32 thresh)
