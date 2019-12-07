@@ -289,8 +289,8 @@ void playbackWindow::on_cmdSave_clicked()
 			qDebug("Resolution: %d x %d", hRes, vRes);
 			qDebug("Bits/pixel: %f", bpp);
 			qDebug("Frames: %d", markOutFrame - markInFrame + 1);
-			qDebug("Free space: %llu", freeSpace);
-			qDebug("Estimated file size: %llu", estimatedSize);
+			qDebug() << "Free space:" << freeSpace;
+			qDebug() << "Estimated file size:" << estimatedSize;
 			qDebug("===================================");
 
 			fileOverMaxSize = fileOverMaxSize && (estimatedSize > 4294967296);
@@ -503,8 +503,10 @@ void playbackWindow::checkForSaveDone()
 
 		struct statvfs statvfsBuf;
 		statvfs(camera->vinst->fileDirectory, &statvfsBuf);
-		qDebug("Free space: %llu  (%lu * %lu)", statvfsBuf.f_bsize * (uint64_t)statvfsBuf.f_bfree, statvfsBuf.f_bsize, statvfsBuf.f_bfree);
-		
+		qDebug() << "Free space:" << statvfsBuf.f_bsize * (uint64_t)statvfsBuf.f_bfree
+			 << " (" << statvfsBuf.f_bsize
+			 << " * " << statvfsBuf.f_bfree << ")";
+
 		/* Prevent the user from pressing the abort/save button just after the last frame,
 		 * as that can make the camera try to save a 2nd video too soon, crashing the camapp.*/
 		if(playFrame >= markOutFrame - 25)
