@@ -125,6 +125,8 @@ CameraErrortype SPI::setMode(bool cpol, bool cpha)
         if (ret == -1)
             return SPI_IOCTL_FAIL;
     }
+
+    return SUCCESS;
 }
 
 Int32 SPI::Transfer(uint64_t txBuf, uint64_t rxBuf, uint32_t len, bool cpol, bool cpha)
@@ -134,7 +136,9 @@ Int32 SPI::Transfer(uint64_t txBuf, uint64_t rxBuf, uint32_t len, bool cpol, boo
 	if(!isOpen)
 		return SPI_NOT_OPEN;
 
-    setMode(cpol, cpha);
+	ret = setMode(cpol, cpha);
+	if (ret != SUCCESS)
+		return ret;
 
 	tr.tx_buf = txBuf;
 	tr.rx_buf = rxBuf;
