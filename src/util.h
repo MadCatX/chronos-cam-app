@@ -61,4 +61,6 @@ int path_is_mounted(const char *path);
 UInt16 readPixelBuf12(const void * buf, UInt32 pixel);
 void writePixelBuf12(void * buf, UInt32 pixel, UInt16 value);
 
+#define ROUND_UP_MULT(x, mult)	(((x) + ((mult) - 1)) & ~((mult) - 1))
+
 #endif // UTIL_H

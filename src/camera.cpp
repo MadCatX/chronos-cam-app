@@ -2082,7 +2082,7 @@ UInt32 Camera::getMiddlePixelValue(bool includeFPNCorrection)
 	}
 
 	qDebug() << "RGB values read:" << rRaw << gRaw << bRaw;
-	int maxVal = max(rRaw, max(gRaw, bRaw));
+    int maxVal = std::max(rRaw, std::max(gRaw, bRaw));
 
 	//gpmc->write32(GPMC_PAGE_OFFSET_ADDR, 0);
 	return maxVal;
