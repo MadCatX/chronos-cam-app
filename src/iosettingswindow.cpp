@@ -90,14 +90,16 @@ void IOSettingsWindow::on_updateTimer()
 
 void IOSettingsWindow::updateIO()
 {
-	char str[100];
 	UInt32 input = camera->io->getIn();
 
-	snprintf(str, sizeof(str), "IO1: %s\r\nIO2: %s\r\nIn3: %s", input & (1 << 0) ? "Hi" : "Lo",
-												input & (1 << 1) ? "Hi" : "Lo",
-												input & (1 << 2) ? "Hi" : "Lo");
+    auto getLoHi = [&input](const size_t idx) {
+        return input & (1 << idx) ? "Hi" : "Lo";
+    };
 
-	ui->lblStatus->setText(str);
+    QString text = QString("IO1: %s\nIO2: %s\nIn3: %s")
+                    .arg(getLoHi(0)).arg(getLoHi(1)).arg(getLoHi(2));
+
+    ui->lblStatus->setText(text);
 }
 
 void IOSettingsWindow::on_cmdOK_clicked()

@@ -201,7 +201,6 @@ void UtilWindow::on_cmdNetUpdate_clicked()
 
 int UtilWindow::updateSoftware(char * updateLocation){
 	struct stat buffer;
-	char mesg[100];
 
 	if(stat (updateLocation, &buffer) == 0)	//If file exists
 	{
@@ -212,8 +211,7 @@ int UtilWindow::updateSoftware(char * updateLocation){
 
 		UInt32 retVal = system(updateLocation);
 		QMessageBox msg;
-		snprintf(mesg, sizeof(mesg), "Update complete! Please restart camera to complete update.");
-		msg.setText(mesg);
+        msg.setText("Update complete! Please restart camera to complete update.");
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();
 		return SUCCESS;
@@ -341,7 +339,6 @@ void UtilWindow::on_cmdColumnGain_clicked()
 {
 	StatusWindow sw;
 	Int32 retVal;
-	char text[100];
 
 	sw.setText("Performing column gain calibration. Please wait...");
 	sw.show();
@@ -355,8 +352,8 @@ void UtilWindow::on_cmdColumnGain_clicked()
 	if(SUCCESS != retVal)
 	{
 		sw.hide();
+        QString text = QString("Error during gain calibration, error %1: %2").arg(retVal).arg(errorCodeString(retVal));
 		QMessageBox msg;
-		snprintf(text, sizeof(text), "Error during gain calibration, error %d: %s", retVal, errorCodeString(retVal));
 		msg.setText(text);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();
@@ -365,8 +362,7 @@ void UtilWindow::on_cmdColumnGain_clicked()
 	{
 		sw.hide();
 		QMessageBox msg;
-		snprintf(text, sizeof(text), "Column gain calibration was successful");
-		msg.setText(text);
+        msg.setText("Column gain calibration was successful");
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();
 	}
@@ -377,7 +373,6 @@ void UtilWindow::on_cmdBlackCalAll_clicked()
 	QString title = QString("Factory Black Calibration");
 	QProgressDialog *progress;
 	Int32 retVal;
-	char text[100];
 
 	progress = new QProgressDialog(this);
 	progress->setWindowTitle(title);
@@ -396,8 +391,8 @@ void UtilWindow::on_cmdBlackCalAll_clicked()
 
 	if(SUCCESS != retVal)
 	{
+        QString text = QString("Error during black calibration, error %1: %2").arg(retVal).arg(errorCodeString(retVal));
 		QMessageBox msg;
-		snprintf(text, sizeof(text), "Error during black calibration, error %d: %s", retVal, errorCodeString(retVal));
 		msg.setText(text);
 		msg.setWindowTitle(title);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
@@ -405,8 +400,8 @@ void UtilWindow::on_cmdBlackCalAll_clicked()
 	}
 	else
 	{
+        QString text("Black cal of all standard resolutions was successful");
 		QMessageBox msg;
-		snprintf(text, sizeof(text), "Black cal of all standard resolutions was successful");
 		msg.setText(text);
 		msg.setWindowTitle(title);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
@@ -471,7 +466,6 @@ void UtilWindow::on_cmdAutoCal_clicked()
 {
 	StatusWindow sw;
 	Int32 retVal;
-	char text[100];
 
 	sw.setText("Performing factory calibration. Please wait...");
 	sw.show();
@@ -488,8 +482,8 @@ void UtilWindow::on_cmdAutoCal_clicked()
 	if(SUCCESS != retVal)
 	{
 		sw.hide();
+        QString text = QString("Error during black calibration, error %1: %2").arg(retVal).arg(errorCodeString(retVal));
 		QMessageBox msg;
-		snprintf(text, sizeof(text), "Error during black calibration, error %d: %s", retVal, errorCodeString(retVal));
 		msg.setText(text);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();
@@ -505,8 +499,8 @@ void UtilWindow::on_cmdAutoCal_clicked()
 
 	if(SUCCESS != retVal) {
 		sw.hide();
+        QString text = QString("Error during gain calibration, error %1: %2").arg(retVal).arg(errorCodeString(retVal));
 		QMessageBox msg;
-		snprintf(text, sizeof(text), "Error during gain calibration, error %d: %s", retVal, errorCodeString(retVal));
 		msg.setText(text);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();
@@ -583,9 +577,8 @@ void UtilWindow::on_cmdWhiteRef_clicked()
 
 	if(SUCCESS != retVal)
 	{
-		char text[100];
+        QString text = QString("Error during white reference calibration, error %1: %2").arg(retVal).arg(errorCodeString(retVal));
 		QMessageBox msg;
-		snprintf(text, 100, "Error during white reference calibration, error %d: %s", retVal, errorCodeString(retVal));
 		msg.setText(text);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();

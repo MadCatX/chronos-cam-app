@@ -536,7 +536,6 @@ void CamMainWindow::on_cmdBkGndButton_clicked()
 
 void CamMainWindow::on_cmdDPCButton_clicked()
 {
-	char text[100];
 	Int32 retVal;
 	int resultCount, resultMax;
 	camera->io->setOutLevel((1 << 1));	//Turn on output drive
@@ -544,17 +543,21 @@ void CamMainWindow::on_cmdDPCButton_clicked()
 	retVal = camera->checkForDeadPixels(&resultCount, &resultMax);
 	if (retVal != SUCCESS) {
 		QMessageBox msg;
-		if (retVal == CAMERA_DEAD_PIXEL_RECORD_ERROR)
-			snprintf(text, sizeof(text), "Failed dead pixel detection, error %d", retVal);
-		else if (retVal == CAMERA_DEAD_PIXEL_FAILED)
-			snprintf(text, sizeof(100), "Failed dead pixel detection\n%d dead pixels found on sensor\nMax value: %d", resultCount, resultMax);
+        auto text = [retVal, resultCount, resultMax]() {
+            if (retVal == CAMERA_DEAD_PIXEL_RECORD_ERROR)
+                return QString("Failed dead pixel detection, error %1").arg(retVal);
+            else if (retVal == CAMERA_DEAD_PIXEL_FAILED)
+                return QString("Failed dead pixel detection\n%1 dead pixels found on sensor\nMax value: %2").arg(resultCount, resultMax);
+            else
+                return QString("Failed dead pixel detection, unexpected error %1").arg(retVal);
+        }();
 		msg.setText(text);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();
 	}
 	else {
+        QString text = QString("Dead pixel detection passed!\nMax deviation: %1").arg(resultMax);
 		QMessageBox msg;
-		snprintf(text, sizeof(text), "Dead pixel detection passed!\nMax deviation: %d", resultMax);
 		msg.setText(text);
 		msg.setWindowFlags(Qt::WindowStaysOnTopHint);
 		msg.exec();

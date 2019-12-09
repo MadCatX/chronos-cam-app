@@ -452,7 +452,6 @@ void RecSettingsWindow::updateFramePreview()
 void RecSettingsWindow::updateInfoText()
 {
 	FrameGeometry frameSize = getResolution();
-	char str[300];
 	char maxRateStr[30];
 	char minPeriodStr[30];
 	char maxExposureStr[30];
@@ -465,8 +464,11 @@ void RecSettingsWindow::updateInfoText()
 	getSIText(maxRateStr, 1.0/fperiod, ceil(log10(fclocks)+1), DEF_SI_OPTS, 1000);
 	getSIText(maxExposureStr, (double)expclocks / camera->sensor->getIntegrationClock(), 10, DEF_SI_OPTS, 8);
 
-	snprintf(str, sizeof(str), "Max rate for this resolution:\r\n%sfps\r\nMin Period: %ss", maxRateStr, minPeriodStr);
-	ui->lblInfo->setText(str);
+    QString text = QString( "Max rate for this resolution:\n%1fps\nMin Period: %2s")
+                    .arg(maxRateStr)
+                    .arg(minPeriodStr);
+
+    ui->lblInfo->setText(text);
 }
 
 void RecSettingsWindow::setResFromText(char * str)

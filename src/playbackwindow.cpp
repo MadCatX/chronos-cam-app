@@ -457,8 +457,12 @@ void playbackWindow::keyPressEvent(QKeyEvent *ev)
 
 void playbackWindow::updateStatusText()
 {
-	char text[100];
-	snprintf(text, sizeof(text), "Frame %d/%d\r\nMark start %d\r\nMark end %d", playFrame + 1, totalFrames, markInFrame, markOutFrame);
+    QString text = QString("Frame %1/%2\nMark start %3\nMark end %4")
+                    .arg(playFrame + 1)
+                    .arg(totalFrames)
+                    .arg(markInFrame)
+                    .arg(markOutFrame);
+
 	ui->lblInfo->setText(text);
 }
 

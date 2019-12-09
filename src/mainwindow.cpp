@@ -80,7 +80,6 @@ unsigned int map_base, map_gpmc;
 
 void MainWindow::on_cmdWrite_clicked()
 {
-	char msg [1000];
 	//camera->autoColGainCorrection();
 	UInt64 wl =	(UInt64)camera->gpmc->read16(WL_DYNDLY_3_ADDR) << 48 |
 				(UInt64)camera->gpmc->read16(WL_DYNDLY_2_ADDR) << 32 |
@@ -95,19 +94,24 @@ void MainWindow::on_cmdWrite_clicked()
 								<< ((wl >> 16) & 0xFF)
 								<< ((wl >> 8) & 0xFF)
 								<< (wl & 0xFF);
-	snprintf(msg, sizeof(msg), "wl_dyndly = %d, %d, %d, %d, %d, %d, %d, %d",
-			(UInt32)((wl >> 56) & 0xFF),
-			(UInt32)((wl >> 48) & 0xFF),
-			(UInt32)((wl >> 40) & 0xFF),
-			(UInt32)((wl >> 32) & 0xFF),
-			(UInt32)((wl >> 24) & 0xFF),
-			(UInt32)((wl >> 16) & 0xFF),
-			(UInt32)((wl >> 8) & 0xFF),
-			(UInt32)(wl & 0xFF));
+
+    auto getWl = [wl](const size_t bits) -> UInt32 {
+        return (UInt32)((wl >> bits) & 0xFF);
+    };
+
+    QString text = QString("wl_dyndly = %1, %2, %3, %4, %5, %6, %7, %8")
+                    .arg(getWl(56))
+                    .arg(getWl(48))
+                    .arg(getWl(40))
+                    .arg(getWl(32))
+                    .arg(getWl(24))
+                    .arg(getWl(16))
+                    .arg(getWl(8))
+                    .arg(getWl(0));
 
 	QMessageBox Msgbox;
 
-	Msgbox.setText(msg);
+    Msgbox.setText(text);
 	Msgbox.exec();
 
 }
@@ -253,7 +257,6 @@ void MainWindow::writePixel12(UInt32 pixel, UInt32 offset, UInt16 value)
 
 void MainWindow::on_cmdFPN_clicked()
 {	
-	char msg [1000];
 	int retVal;
 	int file;
 	unsigned char writeBuf[8] = {'A', 'B', 'C', '1', '2', '3', 'X', 'D'};
@@ -285,15 +288,18 @@ void MainWindow::on_cmdFPN_clicked()
 	qDebug() <<"eeprom_read_large returned" << retVal;
 
 	::close(file);
-	snprintf(msg, sizeof(msg), "Read = %x, %x, %x, %x, %x, %x, %x, %x",
-			(UInt32)buf[0],
-			(UInt32)buf[1],
-			(UInt32)buf[2],
-			(UInt32)buf[3],
-			(UInt32)buf[4],
-			(UInt32)buf[5],
-			(UInt32)buf[6],
-			(UInt32)buf[7]);
+
+    QString msg;
+    msg.sprintf("Read = %x, %x, %x, %x, %x, %x, %x, %x",
+                (UInt32)buf[0],
+                (UInt32)buf[1],
+                (UInt32)buf[2],
+                (UInt32)buf[3],
+                (UInt32)buf[4],
+                (UInt32)buf[5],
+                (UInt32)buf[6],
+                (UInt32)buf[7]
+               );
 
 	QMessageBox Msgbox;
 
