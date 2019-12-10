@@ -36,6 +36,7 @@
 #include "lux1310.h"
 #include "sensor.h"
 #include "defines.h"
+#include "fguControlAdaptor.h"
 #include <QWSDisplay>
 
 #define USE_3POINT_CAL 0
@@ -43,7 +44,8 @@
 void* recDataThread(void *arg);
 
 
-Camera::Camera()
+Camera::Camera(QObject *parent) :
+    QObject(parent)
 {
 	QSettings appSettings;
 
@@ -63,6 +65,9 @@ Camera::Camera()
 	strcpy(serialNumber, "Not_Set");
 
 	pinst = new Power();
+
+	FguControl::registerMetas();
+	dbusAdaptor = new FguControlAdaptor(this);
 }
 
 Camera::~Camera()
@@ -70,7 +75,8 @@ Camera::~Camera()
 	terminateRecDataThread = true;
 	pthread_join(recDataThreadID, NULL);
 
-	delete pinst;
+    delete pinst;
+    delete dbusAdaptor;
 }
 
 CameraErrortype Camera::init(GPMC * gpmcInst, Video * vinstInst, ImageSensor * sensorInst, UserInterface * userInterface, UInt32 ramSizeVal, bool color)
@@ -2960,4 +2966,44 @@ void* recDataThread(void *arg)
 	}
 
 	pthread_exit(NULL);
+}
+
+FguControlVideoSettings Camera::get_video_settings()
+{
+    FguControlVideoSettings settings;
+
+    settings.vres = imagerSettings.geometry.vRes;
+    settings.hres = imagerSettings.geometry.hRes;
+    settings.framerate = 1.0 / imagerSettings.period;
+    settings.isValid = true;
+
+    return settings;
+}
+
+FguControlVideoSettings Camera::set_video_settings(const int vres, const int hres, const double framerate)
+{
+    ImagerSettings_t imgs = imagerSettings;
+
+    if (getIsRecording()) {
+        return FguControlVideoSettings{imgs.geometry.vRes,
+                                       imgs.geometry.hRes,
+                                       1.0 / imgs.period,
+                                       false};
+    }
+
+    imgs.geometry.vRes = vres;
+    imgs.geometry.hRes = hres;
+    imgs.period = 1.0 / framerate;
+
+    auto ret = setImagerSettings(imgs);
+
+    if (ret != SUCCESS)
+        return FguControlVideoSettings{0, 0, 0.0, false};
+    else {
+        auto currentImgs = getImagerSettings();
+        return FguControlVideoSettings{currentImgs.geometry.vRes,
+                                       currentImgs.geometry.hRes,
+                                       1.0 / currentImgs.period,
+                                       true};
+    }
 }

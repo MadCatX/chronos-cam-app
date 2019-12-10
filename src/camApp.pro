@@ -118,7 +118,9 @@ SOURCES += main.cpp\
     colordoublespinbox.cpp \
     aptupdate.cpp \
     errorStrings.cpp \
-    power.cpp
+    power.cpp \
+    fguControlAdaptor.cpp \
+    fguControlCommon.cpp
 
 ## Generate version.cpp on every build
 versionTarget.target = version.cpp
@@ -178,7 +180,9 @@ HEADERS  += mainwindow.h \
     frameGeometry.h \
     sensor.h \
     aptupdate.h \
-    power.h
+    power.h \
+    fguControlAdaptor.h \
+    fguControlCommon.h
 
 FORMS    += mainwindow.ui \
     cammainwindow.ui \

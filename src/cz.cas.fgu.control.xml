@@ -1,0 +1,16 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN" "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+<node>
+	<interface name="cz.cas.fgu.control">
+		<method name="set_video_settings">
+			<arg name="vres" type="i" direction="in" />
+			<arg name="hres" type="i" direction="in" />
+			<arg name="framerate" type="d" direction="in" />
+			<arg name="settings" type="(iidb)" direction="out" />
+			<annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="FguControlVideoSettings" />
+		</method>
+		<method name="get_video_settings">
+			<arg name="settings" type="(iidb)" direction="out" />
+			<annotation name="org.qtproject.QtDBus.QtTypeName.Out0" value="FguControlVideoSettings" />
+		</method>
+	</interface>
+</node>

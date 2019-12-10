@@ -32,6 +32,7 @@
 #include "io.h"
 #include "string.h"
 #include "types.h"
+#include "fguControlCommon.h"
 
 #define RECORD_DATA_LENGTH		2048		//Number of record data entries for the record sequencer data
 #define MAX_FRAME_WORDS			0x19000
@@ -74,6 +75,8 @@
 #define TRIGGERDELAY_TIME_RATIO 0
 #define TRIGGERDELAY_SECONDS 1
 #define TRIGGERDELAY_FRAMES 2
+
+class FguControlAdaptor;
 
 /*
 typedef enum CameraErrortype
@@ -168,10 +171,11 @@ typedef struct {
 	double matrix[9];
 } ColorMatrix_t;
 
-class Camera
+class Camera : public QObject
 {
+    Q_OBJECT
 public:
-	Camera();
+    Camera(QObject *parent = nullptr);
 	~Camera();
 	CameraErrortype init(GPMC * gpmcInst, Video * vinstInst, ImageSensor * sensorInst, UserInterface * userInterface, UInt32 ramSizeVal, bool color);
 	Int32 startRecording(void);
@@ -338,6 +342,13 @@ private:
 	bool terminateRecDataThread;
 	UInt32 ramSize;
 	pthread_t recDataThreadID;
+
+    FguControlAdaptor *dbusAdaptor;
+
+private slots:
+    /* D-Bus signal handlers */
+    FguControlVideoSettings get_video_settings();
+    FguControlVideoSettings set_video_settings(const int vres, const int hres, const double framerate);
 };
 
 #endif // CAMERA_H
