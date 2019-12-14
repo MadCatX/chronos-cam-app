@@ -55,6 +55,7 @@ extern "C" {
 #include "defines.h"
 
 #include "myinputpanelcontext.h"
+#include "fguControlCommon.h"
 
 volatile sig_atomic_t done = 0;
 
@@ -67,6 +68,7 @@ void term(int signum)
 
 int main(int argc, char *argv[])
 {
+    qDebug() << "Init...";
 	QApplication a(argc, argv);
 	
 	QCoreApplication::setOrganizationName("KronTech");
@@ -141,7 +143,9 @@ int main(int argc, char *argv[])
 
 	//Disable stdout buffering so prints work rather than just filling the buffer.
 //	setbuf(stdout, NULL);
-	
+
+    FguControl::registerMetas();
+
 	//Set the minimum size of buttons and other UI interaction elements
 	QApplication::setGlobalStrut(QSize(40, 40));
 	

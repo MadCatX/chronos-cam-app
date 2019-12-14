@@ -66,8 +66,8 @@ Camera::Camera(QObject *parent) :
 
 	pinst = new Power();
 
-	FguControl::registerMetas();
 	dbusAdaptor = new FguControlAdaptor(this);
+    FguControl::registerService(dbusAdaptor);
 }
 
 Camera::~Camera()
